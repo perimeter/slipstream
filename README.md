@@ -1,4 +1,4 @@
-[![Build Status](https://secure.travis-ci.org/garyr/phpbin.png)](http://travis-ci.org/perimeter/slipstream)
+[![Build Status](https://secure.travis-ci.org/perimeter/slipstream.png)](http://travis-ci.org/perimeter/slipstream)
 
 Slipstream
 ==========
