@@ -1,4 +1,4 @@
-[![Build Status](https://secure.travis-ci.org/garyr/phpbin.png)](http://travis-ci.org/perimeter/slipstream)
+[![Build Status](https://secure.travis-ci.org/perimeter/slipstream.png)](http://travis-ci.org/perimeter/slipstream)
 
 Slipstream
 ==========
@@ -35,7 +35,7 @@ any desired interval, but best ran at least every 5 minutes via cron scheduling.
 ## Internals
 
 As requests are stored, they are written to a serialized object log. The log mechanism
-attempts to uniquely identify request sources and uses an fnv hash to map to an
+attempts to uniquely identify request sources and uses an hashing algorithm to map to an
 appropriate log slot. Log targets are also switched every minute up to a max of 10 logs,
 after which the oldest unprocessed log will become overwritten. This helps keep the
 disk usage minimal should the worker fail to execute.
