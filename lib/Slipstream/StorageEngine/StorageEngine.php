@@ -11,13 +11,11 @@ abstract class StorageEngine implements StorageEngineInterface
 
     public function __construct($options = array())
     {
-        if(!array_key_exists('active_count', $this->options))
-        {
+        if (!array_key_exists('active_count', $this->options)) {
             $this->options['active_count'] = 10;    // preserve 10 log round robin
         }
 
-        if(!array_key_exists('active_duration', $this->options))
-        {
+        if (!array_key_exists('active_duration', $this->options)) {
             $this->options['active_duration'] = 60;    // one minute default
         }
 
@@ -31,8 +29,7 @@ abstract class StorageEngine implements StorageEngineInterface
     {
         $sapi = php_sapi_name();
         $thumbprint = null;
-        switch($sapi)
-        {
+        switch ($sapi) {
             // apache uses the server addr port, and remote addr + user agent
             case 'apache2handler':
                 $thumbprint = $_SERVER['SERVER_ADDR'] . $_SERVER['SERVER_PORT'];
@@ -47,6 +44,7 @@ abstract class StorageEngine implements StorageEngineInterface
                 $thumbprint = getmypid();
                 break;
         }
+
         return md5($thumbprint);
     }
 }
