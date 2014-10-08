@@ -17,8 +17,8 @@ class Slipstream_WorkerTest extends PHPUnit_Framework_TestCase
         $output = ob_get_contents();
         ob_end_clean();
 
-        $this->assertTrue($result !== FALSE); 
-        $this->assertTrue(is_integer($result)); 
+        $this->assertTrue($result !== FALSE);
+        $this->assertTrue(is_integer($result));
         $this->assertTrue(strlen($output) > 0);
 
         Slipstream\Collector::purge();

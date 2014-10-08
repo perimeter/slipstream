@@ -10,16 +10,18 @@ Small php lib to assist with processing asynchronous requests (e.g http, tcp, my
 Currently only the File storage engine and Http(s) request types are supported. Http
 requests are fulfilled using libcurl.
 
-    $request = new Slipstream\RequestType\Http(array(
-        'url' => 'http://example.com/',
-        'headers' => array('x-foo' => 'bar')
-    ));
+```php
+$request = new Slipstream\RequestType\Http(array(
+    'url' => 'http://example.com/',
+    'headers' => array('x-foo' => 'bar')
+));
 
-    // defaults to /tmp/slipstream
-    $engine = new Slipstream\StorageEngine\File();
-    Slipstream\Collector::engine($engine);
+// defaults to /tmp/slipstream
+$engine = new Slipstream\StorageEngine\File();
+Slipstream\Collector::engine($engine);
 
-    $result = Slipstream\Collector::store($request);
+$result = Slipstream\Collector::store($request);
+```
 
 ## Worker Request Execution
 

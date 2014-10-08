@@ -18,7 +18,8 @@ class Worker extends Singleton
     {
         $Slipstream = self::getInstance(__CLASS__);
         $Slipstream->engine = $Engine;
-        return TRUE;
+
+        return true;
     }
 
     /**
@@ -34,12 +35,13 @@ class Worker extends Singleton
         // result will be numeric count of jobs if successful
         do {
             $result = self::work();
-            if ($result === FALSE) {
+            if ($result === false) {
                 self::error(__FILE__ . " failed processing job(s)");
                 exit(1);
             }
             usleep(10000); // sleep for 0.01 of a second to be sure the cpu doesn't pin
-        } while ($result !== FALSE && $result > 0);
+        } while ($result !== false && $result > 0);
+
         return $result;
     }
 
@@ -48,9 +50,9 @@ class Worker extends Singleton
      */
     protected static function error($message)
     {
-        $stderr = fopen('php://stderr', 'w'); 
-        fwrite($stderr, 'Error: ' . $message . "\n"); 
-        fclose($stderr); 
+        $stderr = fopen('php://stderr', 'w');
+        fwrite($stderr, 'Error: ' . $message . "\n");
+        fclose($stderr);
     }
 
     /**
@@ -60,7 +62,7 @@ class Worker extends Singleton
     protected static function work()
     {
         $Slipstream = self::getInstance(__CLASS__);
-        
+
         echo "Processing Job: ";
         $count = 0;
         while ($job = $Slipstream->engine->read()) {
@@ -70,7 +72,8 @@ class Worker extends Singleton
                 // TODO
                 // $Slipstream->engine->fail();
                 echo "FAIL\n";
-                return FALSE;
+
+                return false;
             }
 
             //TODO log activity with splunk?
@@ -85,13 +88,14 @@ class Worker extends Singleton
                     $sleep = self::getDelay($retries);
                     sleep($sleep);
                 }
-            } while ($success == FALSE && $retries < 3);
+            } while ($success == false && $retries < 3);
 
-            if ($success == FALSE) {
+            if ($success == false) {
                 // TODO
                 // $Slipstream->engine->fail();
                 echo "FAIL\n";
-                return FALSE;
+
+                return false;
             } else {
                 $count++;
             }
@@ -105,6 +109,7 @@ class Worker extends Singleton
         }
 
         $Slipstream->engine->finish();
+
         return $count;
     }
 
@@ -123,9 +128,9 @@ class Worker extends Singleton
         $workers = intval(trim($output));
 
         if ($workers >= $worker_limit) {
-            $limit = TRUE;
+            $limit = true;
         } else {
-            $limit = FALSE;
+            $limit = false;
         }
 
         return $limit;
