@@ -57,7 +57,7 @@ class Curl
 	 * Store the curl_init() resource.
 	 * @var resource
 	 */
-	protected $ch = NULL;
+	protected $ch = null;
 
 	/**
 	 * Store the CURLOPT_* values.
@@ -99,7 +99,7 @@ class Curl
 	 * @return Curl A new Curl object.
 	 * @throws ErrorException
 	 */
-	public function __construct ( $url = NULL )
+	public function __construct($url = null)
 	{
 		// Make sure the cURL extension is loaded
 		if ( !extension_loaded('curl') )
@@ -136,7 +136,7 @@ class Curl
 	 * @param string $url The URL to open (optional)
 	 * @return bool|Curl
 	 */
-	public function init ( $url = NULL )
+	public function init($url = null)
 	{
 		// If it's still init'ed, return false.
 		if ( $this->ch ) return false;
@@ -145,7 +145,7 @@ class Curl
 		$this->ch = curl_init();
 
 		// reset all the values that were already set
-		foreach ( $this->curlopt as $const => $value ) {
+		foreach ($this->curlopt as $const => $value) {
 			curl_setopt($this->ch, constant($const), $value);
 		}
 
@@ -161,7 +161,7 @@ class Curl
 	 *
 	 * @return mixed
 	 */
-	public function exec ()
+	public function exec()
 	{
 		return curl_exec($this->ch);
 	}
@@ -176,12 +176,12 @@ class Curl
 	 * @see $multi
 	 * @return mixed
 	 */
-	public function fetch ()
+	public function fetch()
 	{
-		if ( $this->multi ) {
+		if ($this->multi) {
 			return curl_multi_getcontent($this->ch);
 		} else {
-			if ( $this->response ) {
+			if ($this->response) {
 				return $this->response;
 			} else {
 				$this->response = curl_exec($this->ch);
@@ -198,16 +198,15 @@ class Curl
 	 * @param bool array optional. Return an array instead of an object.
 	 * @return mixed an array or object (possibly null).
 	 */
-	public function fetch_json ( $array = false )
+	public function fetch_json($array = false)
 	{
 		return json_decode($this->fetch(), $array);
 	}
 
-
 	/**
 	 * Close the cURL session and free the resource.
 	 */
-	public function close ()
+	public function close()
 	{
 		if ( !empty($this->ch) && is_resource($this->ch) )
 			curl_close($this->ch);
@@ -238,7 +237,7 @@ class Curl
 	 *
 	 * @return array
 	 */
- 	public function version ()
+ 	public function version()
  	{
  		$version = curl_version();
 
@@ -262,7 +261,7 @@ class Curl
 	 * @param mixed $opt A string or constant (optional).
 	 * @return mixed An array or string.
 	 */
-	public function info ( $opt = false )
+	public function info($opt = false)
 	{
 		if (false === $opt) {
 			return curl_getinfo($this->ch);
@@ -292,7 +291,7 @@ class Curl
 	 * @param mixed $value
 	 * @return void
 	 */
-	public function __set ( $opt, $value )
+	public function __set($opt, $value)
 	{
 		$const = 'CURLOPT_'.strtoupper($opt);
 		if ( defined($const) ) {
@@ -316,7 +315,7 @@ class Curl
 	 * @param string $opt The second half of the CURLOPT_* constant, not case sensitive
 	 * @return mixed The set value of CURLOPT_<var>$opt</var>, or NULL if it hasn't been set (ie: is still default).
 	 */
-	public function __get ( $opt )
+	public function __get($opt)
 	{
 		return $this->curlopt['CURLOPT_'.strtoupper($opt)];
 	}
@@ -334,7 +333,7 @@ class Curl
 	 * @param string $opt The second half of the CURLOPT_* constant, not case sensitive
 	 * @return bool
 	 */
-	public function __isset ( $opt )
+	public function __isset($opt)
 	{
 		return isset($this->curlopt['CURLOPT_'.strtoupper($opt)]);
 	}
@@ -354,7 +353,7 @@ class Curl
 	 * @param string $opt The second half of the CURLOPT_* constant, not case sensitive
 	 * @return void
 	 */
-	public function __unset ( $opt )
+	public function __unset($opt)
 	{
 		// Since we really can't reset a CURLOPT_* to its
 		// default value without knowing the default value,
@@ -366,7 +365,7 @@ class Curl
 	 *
 	 * @param CurlParallel $mh The CurlParallel object that needs {@link Curl::$ch $ch}.
 	 */
-	public function grant ( CurlParallel $mh )
+	public function grant(CurlParallel $mh)
 	{
 		$mh->accept($this->ch);
 		$this->multi = true;
@@ -377,7 +376,7 @@ class Curl
 	 *
 	 * @param CurlParallel $mh The CurlParallel object that no longer needs {@link Curl::$ch $ch}.
 	 */
-	public function revoke ( CurlParallel $mh )
+	public function revoke(CurlParallel $mh)
 	{
 		$mh->release($this->ch);
 		$this->multi = false;
@@ -463,7 +462,7 @@ class CurlParallel
 	 * @param Curl $curl,... {@link Curl} objects to add to the Parallelizer.
 	 * @return CurlParallel
 	 */
-	public function __construct ()
+	public function __construct()
 	{
 		$this->mh = curl_multi_init();
 
@@ -477,7 +476,7 @@ class CurlParallel
 	/**
 	 * On destruction, frees resources.
 	 */
-	public function __destruct ()
+	public function __destruct()
 	{
 		$this->close();
 	}
@@ -485,9 +484,9 @@ class CurlParallel
 	/**
 	 * Close the current session and free resources.
 	 */
-	public function close ()
+	public function close()
 	{
-		foreach ( $this->ch as $ch ) {
+		foreach ($this->ch as $ch) {
 			curl_multi_remove_handle($this->mh, $ch);
 		}
 		curl_multi_close($this->mh);
@@ -502,7 +501,7 @@ class CurlParallel
 	 * @uses CurlParallel::accept()
 	 * @param Curl $ch Curl object.
 	 */
-	public function add ( Curl $ch )
+	public function add(Curl $ch)
 	{
 		// get the protected resource
 		$ch->grant($this);
@@ -515,7 +514,7 @@ class CurlParallel
 	 * @uses Curl::revoke()
 	 * @uses CurlParallel::release()
 	 */
-	public function remove ( Curl $ch )
+	public function remove(Curl $ch)
 	{
 		$ch->revoke($this);
 	}
@@ -523,7 +522,7 @@ class CurlParallel
 	/**
 	 * Execute the parallel cURL requests.
 	 */
-	public function exec ()
+	public function exec()
 	{
 		do {
 			curl_multi_exec($this->mh, $running);
@@ -536,7 +535,7 @@ class CurlParallel
 	 *
 	 * @param resource $ch A resource returned by curl_init().
 	 */
-	public function accept ( $ch )
+	public function accept($ch)
 	{
 		$this->ch[] = $ch;
 		curl_multi_add_handle($this->mh, $ch);
@@ -548,7 +547,7 @@ class CurlParallel
 	 *
 	 * @param resource $ch A resource returned by curl_init().
 	 */
-	public function release ( $ch )
+	public function release($ch)
 	{
 		if ( false !== $key = array_search($this->ch, $ch) ) {
 			unset($this->ch[$key]);

@@ -14,7 +14,8 @@ class Collector extends Singleton
     {
         $Slipstream = self::getInstance(__CLASS__);
         $Slipstream->engine = $Engine;
-        return TRUE;
+
+        return true;
     }
 
     /**
@@ -23,6 +24,7 @@ class Collector extends Singleton
     public static function purge()
     {
         $Slipstream = self::getInstance(__CLASS__);
+
         return $Slipstream->engine->purge();
     }
 
@@ -32,6 +34,7 @@ class Collector extends Singleton
     public static function store(RequestTypeInterface $request)
     {
         $Slipstream = self::getInstance(__CLASS__);
+
         return $Slipstream->engine->write(serialize($request));
     }
 }

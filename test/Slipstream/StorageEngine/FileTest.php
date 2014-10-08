@@ -14,7 +14,7 @@ class Slipstream_StorageEngineFileTest extends PHPUnit_Framework_TestCase
         $engine->purge();
 
         // sleep until next interval
-        $now = time();     
+        $now = time();
         $interval = ceil($now / $options['rotate_interval']) * $options['rotate_interval'];
         sleep($interval - time() + 1);
 
@@ -27,15 +27,14 @@ class Slipstream_StorageEngineFileTest extends PHPUnit_Framework_TestCase
         // sleep so this data can be moved to ready state
         sleep($options['rotate_interval'] + 1);
     }
-    
+
     public function testRead()
     {
         $engine = new Slipstream\StorageEngine\File(array(
             'path' => '/tmp/slipstream-test'
         ));
         $count = 0;
-        while($result = $engine->read())
-        {
+        while ($result = $engine->read()) {
             $count++;
             $this->assertTrue($result !== false);
             $data = unserialize($result);

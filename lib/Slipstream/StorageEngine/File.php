@@ -112,6 +112,7 @@ class File extends StorageEngine
         $job_file = $this->getJobFile($processing_lock);
         if (!$job_file) {
             $processing_lock->unlock();
+
             return false;
         }
 
@@ -126,6 +127,7 @@ class File extends StorageEngine
             // TODO: this is an error state
             fclose($handle);
             $processing_lock->unlock();
+
             return false;
         }
 
@@ -135,6 +137,7 @@ class File extends StorageEngine
             // TODO: this is an error state
             fclose($handle);
             $processing_lock->unlock();
+
             return false;
         }
 
@@ -174,6 +177,7 @@ class File extends StorageEngine
 
         // release the lock
         $collecting_lock->unlock();
+
         return true;
     }
 
@@ -182,10 +186,11 @@ class File extends StorageEngine
      */
     private function getActiveLogFile()
     {
-        $now = time();     
+        $now = time();
         $interval = ceil($now / $this->options['rotate_interval']) * $this->options['rotate_interval'];
         $prepend = $this->options['prepend'];
         $name = (!empty($prepend)) ? $prepend . '_' . $interval : $interval;
+
         return $this->options['path'] . '/' . self::FILE_STATE_COLLECTING . '/' . $name;
     }
 
@@ -208,6 +213,7 @@ class File extends StorageEngine
             $ready_lock = $this->getStateLock(self::FILE_STATE_READY);
             if (!$ready_lock) {
                 $processing_lock->unlock();
+
                 return false;
             }
             // move states
@@ -239,6 +245,7 @@ class File extends StorageEngine
         if (!$collecting_lock || !$ready_lock) {
             $collecting_lock->unlock();
             $ready_lock->unlock();
+
             return false;
         }
         // move states
@@ -267,13 +274,14 @@ class File extends StorageEngine
         if (!$result) {
             return false;
         }
+
         return $newfile;
     }
 
     /**
      * Gets a list of log files by dir
      * @param  [type] $dir [description]
-     * @return [type]      [description]
+     * @return [type] [description]
      */
     private function getLogFileList($state)
     {
@@ -294,6 +302,7 @@ class File extends StorageEngine
             }
             closedir($handle);
         }
+
         return $files;
     }
 
@@ -319,6 +328,7 @@ class File extends StorageEngine
         if ($lock_timeout) {
             return false;
         }
+
         return $lock;
     }
 
@@ -327,12 +337,10 @@ class File extends StorageEngine
      */
     private function pathCheck()
     {
-        foreach($this->options['file_states'] as $key => $path)
-        {
+        foreach ($this->options['file_states'] as $key => $path) {
             $dir = $this->options['path'] . '/' . $path;
-            if(!is_dir($dir))
-            {
-                mkdir($dir, 0777, TRUE);
+            if (!is_dir($dir)) {
+                mkdir($dir, 0777, true);
             }
         }
     }

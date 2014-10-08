@@ -17,7 +17,7 @@ Usage:
 $lock = new ExclusiveLock("mylock");
 
 //lock
-if ($lock->lock( ) == FALSE) {
+if ($lock->lock( ) == false) {
     error("Locking failed");
 }
 //--
@@ -35,48 +35,48 @@ class ExclusiveLock
 {
     protected $key   = null;  //user given value
     protected $file  = null;  //resource to lock
-    protected $own   = FALSE; //have we locked resource
+    protected $own   = false; //have we locked resource
 
-    function __construct($key) 
+    public function __construct($key)
     {
         $this->key = $key;
         //create a new resource or get exisitng with same key
         $this->file = fopen("$key.lockfile", 'w+');
     }
 
-
-    function __destruct() 
+    public function __destruct()
     {
-        if ($this->own == TRUE) {
+        if ($this->own == true) {
             $this->unlock( );
         }
     }
 
-
-    function lock() 
+    public function lock()
     {
         if (!flock($this->file, LOCK_EX)) { //failed
             $key = $this->key;
             error_log("Slipstream\ExclusiveLock::lock FAILED to acquire lock [$key]");
-            return FALSE;
+
+            return false;
         }
         ftruncate($this->file, 0); // truncate file
         //write something to just help debugging
         fwrite( $this->file, "Locked\n");
         fflush( $this->file );
 
-        $this->own = TRUE;
+        $this->own = true;
+
         return $this->own;
     }
 
-
-    function unlock() 
+    public function unlock()
     {
         $key = $this->key;
-        if ($this->own == TRUE) {
+        if ($this->own == true) {
             if (!flock($this->file, LOCK_UN)) { //failed
                 error_log("Slipstream\ExclusiveLock::lock FAILED to release lock [$key]");
-                return FALSE;
+
+                return false;
             }
             ftruncate($this->file, 0); // truncate file
             //write something to just help debugging
@@ -85,7 +85,8 @@ class ExclusiveLock
         } else {
             error_log("Slipstream\ExclusiveLock::unlock called on [$key] but its not acquired by caller");
         }
-        $this->own = FALSE;
+        $this->own = false;
+
         return $this->own;
     }
 };

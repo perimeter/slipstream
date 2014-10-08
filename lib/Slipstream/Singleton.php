@@ -11,11 +11,11 @@ abstract class Singleton
      */
     protected static function getInstance($class)
     {
-        if(!self::$_instance)
-        {
+        if (!self::$_instance) {
             $ref = new \ReflectionClass($class);
             self::$_instance = $ref->newInstanceArgs();
         }
+
         return self::$_instance;
     }
 }
