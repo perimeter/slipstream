@@ -42,13 +42,13 @@ class Http implements RequestTypeInterface
     {
         $url = $this->scheme['scheme'] . '://';
         $url .= $this->scheme['host'];
-        
+
         if (!empty($this->scheme['port']) && is_numeric($this->scheme['port'])) {
             $url .= ':' . $this->scheme['port'];
         }
 
         $url .= $this->scheme['path'];
-        
+
         if (!empty($this->scheme['query'])) {
             $url .= '?' . $this->scheme['query'];
         }
@@ -73,12 +73,11 @@ class Http implements RequestTypeInterface
 
         $Curl->exec();
 
-        // return FALSE;
-
         if ($Curl->info('http_code') >= 400) {
-            return FALSE;
+            return false;
         }
-        return TRUE;
+
+        return true;
     }
 
     public function getMethod()

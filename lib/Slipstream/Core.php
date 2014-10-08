@@ -12,11 +12,11 @@ class Core
     {
         $buf = str_split($str);
         $hash = 16777619;
-        foreach($buf as $chr)
-        {
+        foreach ($buf as $chr) {
             $hash = $hash ^ ord($chr);
             $hash += ($hash << 1) + ($hash << 4) + ($hash << 7) + ($hash << 8) + ($hash << 24); //This is $hash * 2166136261
         }
+
         return $hash & 0x0ffffffff;
     }
 }
