@@ -1,0 +1,15 @@
+{
+    "name": "perimeter/slipstream",
+    "description": "php lib to assist with processing asynchronous requests",
+    "authors": [
+        {
+            "name": "Gary Rogers",
+            "email": "gmrwebde@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Slipstream":  "lib"
+        }
+    }
+}

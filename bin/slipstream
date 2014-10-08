@@ -1,0 +1,21 @@
+#!/bin/env php
+<?php
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+// takes an argument to use for prepend string
+$options = null;
+if (is_array($argv) && array_key_exists('1', $argv) && !empty($argv[1])) {
+	$options = array('prepend' => preg_replace('/[^A-Za-z0-9_-]+/', '', $argv[1]));
+}
+
+// file engine (defaults to /tmp/slipstream)
+$engine = new Slipstream\StorageEngine\File($options);
+Slipstream\Worker::engine($engine);
+
+/**
+ * run the worker (will run until no more work)
+ *
+ * NOTE: script will exit with status 1 if error occurs
+ */
+Slipstream\Worker::run();
